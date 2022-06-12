@@ -1,28 +1,41 @@
 const BasePage = require("./basePage");
 
 class CartPage extends BasePage {
+    /*async applyBtn() {
+        return await $(".promoBtn");
+    };*/
 
-    async clickOnCartIcon() {
-        await(await $("img[alt='Cart']")).click();
+    async ordersTable() {
+        return await $$("table#productCartTables tbody");
     };
 
-    get ProductInPopup() { return await $("div[class='cart-preview active'] ul.cart-items li") };
-
-    async ProductNameInPopup() {
-        return await (await this.ProductInPopup.$(".product-name")).getText();
+    async getProductName() {
+        const name = await this.ordersTable();
+        return await (await name.$(" .product-name").getText());
     };
 
-    async ProductPriceInPopup() {
-        return await (await this.ProductInPopup.$(".product-price")).getText();
+    async getQuantity() {
+        const quant = await this.ordersTable();
+        const quantity = await (await quant.$(" .quantity")).getText();
+        return +quantity;
     };
 
-    async ProductTotalPriceInPopup() {
-        return await (await this.ProductInPopup.$(".product-total .amount")).getText();
+    async getPrice() {
+        const pr = await this.ordersTable()
+        const price = await (await pr.$("  td:nth-child(4) > p")).getText();
+        return +price;
     };
 
-    async ClickOnProceedToCheckoutBtn() {
-        await (await $("div.cart-preview.active > div.action-block > button")).click();
+    async getTotal() {
+        const tot = await this.ordersTable();
+        const total = await (await tot.$("  td:nth-child(5) > p")).getText();
+        return +total;
     };
+
+    async clickOnPlaceOrderBtn() {
+        await (await $("//button[contains(text(),'Place Order')]")).click();
+    };
+
 };
 
 module.exports = new CartPage();
